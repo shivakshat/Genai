@@ -5,7 +5,7 @@ import csv
 import re
 import os
 # Configure Gemini API
-genai.configure(api_key="AIzaSyCXFzEYHghhT4Y8Dsx8ySwf8H8KB9T8ruE")
+genai.configure(api_key="")
 
 model = genai.GenerativeModel("gemini-3.1-flash-lite-preview")
 
