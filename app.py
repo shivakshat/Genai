@@ -1,10 +1,10 @@
 import streamlit as st
 import google.generativeai as genai
-# from datetime import datetime
-# import csv
-# import re
-# import os
-# Configure Gemini API
+from datetime import datetime
+import csv
+import re
+import os
+Configure Gemini API
 Api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=Api_key)
 
