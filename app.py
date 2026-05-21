@@ -4,6 +4,7 @@ from datetime import datetime
 import csv
 import re
 import os
+import io
 # Configure Gemini API
 Api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=Api_key)
@@ -11,6 +12,10 @@ genai.configure(api_key=Api_key)
 model = genai.GenerativeModel("gemini-3.1-flash-lite-preview")
 
 st.title("Vocabulary Builder")
+
+# Initialize session state for user's words
+if "user_words" not in st.session_state:
+    st.session_state.user_words = []
 
 # User input
 word = st.text_input("Enter a word")
@@ -85,6 +90,8 @@ if st.button("Get Meaning"):
 
                 writer.writerow(data)
 
+            st.session_state.user_words.append(data)
+
             st.success("Data saved to CSV.")
 
         else:
@@ -93,12 +100,23 @@ if st.button("Get Meaning"):
 
 st.divider()
 
-csv_file_path = "words.csv"
-if os.path.isfile(csv_file_path):
-    with open(csv_file_path, "rb") as file:
-        st.download_button(
-            label="Download Vocabulary CSV",
-            data=file,
-            file_name="vocabulary.csv",
-            mime="text/csv"
-        )
+if st.session_state.user_words:
+    output = io.StringIO()
+    fieldnames = [
+        "word",
+        "date added",
+        "part of speech",
+        "meaning",
+        "example sentence"
+    ]
+    writer = csv.DictWriter(output, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(st.session_state.user_words)
+    csv_data = output.getvalue()
+    
+    st.download_button(
+        label="Download My Vocabulary CSV",
+        data=csv_data,
+        file_name="my_vocabulary.csv",
+        mime="text/csv"
+    )
