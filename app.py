@@ -4,7 +4,7 @@ from datetime import datetime
 import csv
 import re
 import os
-Configure Gemini API
+# Configure Gemini API
 Api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=Api_key)
 
